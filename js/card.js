@@ -2,7 +2,8 @@ function createCard (x,soot,value, color, left, top) {
     // create the card div
     var card = document.createElement("div");
 
-    card.setAttribute("onclick", "rotateOneCard(this)");
+ // card.setAttribute("onclick", "rotateOneCard(this)");
+    card.setAttribute("onclick", "rotateThisCard(this)");
     // card.className="card ace" + x;
     card.setAttribute("class", "card ace" + x);
     card.setAttribute("id", "card" + x);
