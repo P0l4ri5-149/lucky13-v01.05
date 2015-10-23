@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            Cards!
+        </title>
+
+        <link rel="stylesheet" href="style.css">
+
+        <script src="card.js"></script>
+        <script src="index.js"></script>
+
+    </head>
+    <body>
+        <div class="wrapper">
+
+            <div class="main-header">
+
+                <div class="title">Cards Project</div>
+
+                <div class="buttons">
+                    <button onclick="makeCards()">Make Cards</button>
+                    <button onclick="shuffleCards()">Shuffle Cards</button>
+                    <button onclick="resetGame()">Reset</button>
+                    <button onclick="clearCards()" style="display:none;">Clear Cards</button>
+                    <button onclick="turnLeft()" style="display:none;">Left</button>
+                    <button onclick="turnRight()" style="display:none;">Right</button>
+                    <button onclick="flip()">Flip</button>
+                </div> <!-- end buttons -->
+
+            </div> <!-- end main-header -->
+
+            <div class="main-content" id="board">
+
+            </div> <!-- end main-content -->
+
+        </div> <!-- end wrapper -->
+
+    </body> <!-- end body -->
+</html>

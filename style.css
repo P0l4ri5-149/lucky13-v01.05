@@ -1,0 +1,166 @@
+html, body {
+    height: 100%;
+    margin: 0px;
+    font-family: "Arial";
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.wrapper {
+    position: absolute;
+    /* add wrapper size */
+    width: 800px;
+    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    /*---------*/
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.main-header {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 80px;
+    background: #15babe;
+}
+
+.main-header .title {
+    font-size: 30px;
+    color: white;
+    font-weight: 600;
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    transform: translate(0, -50%);
+}
+
+.main-header .buttons {
+    display: inline-block;
+    position: absolute;
+    right: 40px;
+    top: 0px;
+    height: 80px;
+}
+
+.main-header button {
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.main-content {
+    position: absolute;
+    top: 80px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: green;
+    overflow: hidden;
+    perspective: 1000px;
+}
+
+.card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    /* make card size smaller
+    width: 200px;
+    height: 300px;
+    */
+
+    width: 56px;
+    height: 90px;
+
+    transform: translate(-50%, -50%) rotateY(180deg); 
+    transition: all 0.2s linear;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.card-face {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: #fea;
+    border: 1px solid black;
+    border-radius: 6px;
+
+    /* make card size smaller
+    width: 200px;
+    height: 300px;
+    */
+
+    width: 56px;
+    height: 90px;
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
+    /* change box-shadow
+    box-shadow: inset 0px 0px 100px 0px rgba(0, 0, 0, 0.3);
+    */
+
+    box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+    color: red;
+}
+
+.card-back {
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: #007;
+    border: 1px solid black;
+    border-radius: 6px;
+    /* change back size 
+    width: 200px;
+    height: 300px;
+    */
+
+    width: 56px;
+    height: 90px;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    box-shadow: inset 0px 0px 100px 0px rgba(0, 0, 0, 0.3);
+}
+
+.card-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -60%);
+    /* change font size 
+    font-size: 140px;
+    */
+
+    font-size: 40px;
+
+
+}
+
+.card-face-ul  {
+    position: absolute;
+    left: 10%;
+    top: 0px;
+    transform: translate(0, 0);
+    font-size: 20px;
+}  
+
+.card-face-lr {
+    position: absolute;
+    right: 10%;
+    bottom: 0px;
+    transform: translate(0, 0);
+    font-size: 20px;
+}
