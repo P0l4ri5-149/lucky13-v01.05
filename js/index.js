@@ -21,8 +21,8 @@ var deckRotation =  [00,00,00,00,00,00,00,00,00,00,00,00,00,     // spades
                      00,00,00,00,00,00,00,00,00,00,00,00,00,];   // diams                      
 
  function rotateCard(id, rotation) {
-    var card = document.getElementById("card" + id);
-    card.style.transform = "translate(-50%, -50%) rotateY(" + rotation + "deg)";
+    var card = $("#card" + id);
+    card.css('transform',"translate(-50%, -50%) rotateY(" + rotation + "deg)");
  }
 
  function rotateOneCard(t) {
@@ -54,14 +54,7 @@ var deckRotation =  [00,00,00,00,00,00,00,00,00,00,00,00,00,     // spades
  }
 
   function applyRotation(rotation) {
-    for(var i=1; i< cardnum; i++)
-    {
-        rotateCard(i,rotation);
-    }
- //   rotateCard(1,rotation); 
- //   rotateCard(2,rotation); 
- //   rotateCard(3,rotation); 
- //   rotateCard(4,rotation); 
+  $(".card:not(.icon)").css('transform',"translate(-50%, -50%) rotateY(" + rotation + "deg)");
  }
 
  function turnLeft() {
@@ -80,27 +73,19 @@ var deckRotation =  [00,00,00,00,00,00,00,00,00,00,00,00,00,     // spades
 
  function flip() {
     console.log("Flip clicked.");
-    if(rotation === 0) {
-        rotation = 180;
-        for( var i = 0; i < 52; i++){
-            deckRotation[i] = 0;
-        }
-    } else {
-        rotation = 0;
-        for( var i = 0; i < 52; i++){
-            deckRotation[i] = 1;
-        }
-    }
-    // rotation = rotation + 180;
+    var r = rotation === 0 ? 0 : 1;
+    rotation = rotation === 0 ? 180 : 0;
+
+    deckRotation = _.map( deckRotation, r);
+
     applyRotation(rotation);   
 };
 
 function resetGame() {
     rotation = 180;
     applyRotation(rotation);
-    for( var i = 0; i < 52; i++){
-        deckRotation[i] = 0;
-    }
+    deckRotation = _.map(deckRotation, function(){ return 0; });
+
 }
 
 /* new stuff for many cards */
