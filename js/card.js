@@ -13,6 +13,7 @@ function createCard (x,soot,value, color, left, top) {
 
     // create the face div
     var cardFace = document.createElement("div");
+    cardFace.setAttribute("id", "cardface" + x);
     cardFace.className="card-face";
     cardFace.style.color = color;
 
