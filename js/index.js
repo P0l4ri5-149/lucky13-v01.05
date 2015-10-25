@@ -32,7 +32,7 @@ function tallyPlayerPoints(p) {
     switch(p) {
         case 1: playerPoints += 10; break;
         case 2: playerPoints += 5;  break;
-        case 3: playerPoints += 3;  break;
+        case 3: playerPoints += 2;  break;
         case 4: playerPoints += 1;  break;
     }
     var ppoints = document.getElementById("playerPoints");
