@@ -22,9 +22,16 @@
             <div class="main-header">
 
                 <div class="title">Cards Project</div>
-                <div class="playerPoints" id="playerPoints"></div>
-                <div class="buttons">
 
+                
+                <div class="playerPoints" id="playerPoints"></div>                   
+                <div class="playSuite">
+                        <button  class="suitBlack" id="soot1" onclick="isSpades()">&spades;</button>
+                        <button  class="suitBlack" id="soot2" onclick="isClubs()">&clubs;</button>
+                        <button  class="suitRed" id="soot3" onclick="isHearts()">&hearts;</button>
+                        <button  class="suitRed" id="soot4" onclick="isDiams()">&diams;</button>
+                </div>
+                <div class="buttons">
                     <button onclick="makeCards()">Make Cards</button>
                     <button onclick="shuffleCards()">Shuffle Cards</button>
                     <button onclick="resetGame()">Reset</button>
