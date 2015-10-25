@@ -1,0 +1,19 @@
+Things to do:
+
+[ ] Add lucky 13 back
+    [ ] Create SVG
+    [ ] Put SVG on backs 
+    [ ] Add additional card back designs
+[ ] Add sounds
+    [ ] Research how to add sounds to website
+    [ ] Create some sounds for effects
+    [ ] Put in sounds
+[ ] Make responsive
+[ ] Correct display of score
+[ ] Meet with Sally
+[ ] Add timer to determine game complete scoring
+[ ] Add advanced play options
+[ ] Create options/settings button with options screen
+[ ] Create scoring page and leaderboard page
+    [ ] Find out what leaderboard server will be
+
