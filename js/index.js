@@ -22,32 +22,37 @@ var deckRotation =  [00,00,00,00,00,00,00,00,00,00,00,00,00,     // spades
                      00,00,00,00,00,00,00,00,00,00,00,00,00,];   // diams 
 
 
-var defaultColumnHits = [00,00,00,00,00,00,00,00,00,00,00,00,00];
-var columnHits = defaultColumnHits;
-                 
+var columnHits = [00,00,00,00,00,00,00,00,00,00,00,00,00];
 
-/* testCards version 1 -- should find all cards after makecards 
- * will flip all cards that are aligned in their respective column
-*/
 
-function testCard() {
-    var i,j,ix,c;
-    for(i=0;i<13;i++) {
-        for(j=0;j<4;j++) {
-            ix = j * 13 + i;
-            c = deckOfCards[ix];
-            if( compareCard(c,i) )
-            {
-                rotateOneCard(ix);
-            }
-        }
+var playerPoints = 0;
+
+function tallyPlayerPoints(p) {
+    console.log("PlayerPoints before tally " + playerPoints);
+    switch(p) {
+        case 1: playerPoints += 10; break;
+        case 2: playerPoints += 5;  break;
+        case 3: playerPoints += 3;  break;
+        case 4: playerPoints += 1;  break;
     }
+    var ppoints = document.getElementById("playerPoints");
+    ppoints.innerHTML = "Points: " + playerPoints;
+    
+    console.dir(columnHits);
+    console.log("PlayerPoints " + playerPoints);
 }
 
-
-/* shuffle(array) 
- *  shuffle cards such that at least one card face value aligns in each column
- */
+function initGame() {
+    playerPoints = 0;
+    for(var i = 0; i<13; i++) {
+        columnHits[i] = 0;
+    }
+    rotation = 180;
+    cardnum = 1;
+    var ppoints = document.getElementById("playerPoints");
+    ppoints.innerHTML = "";
+}
+                 
 
 function randomizeCards(array) {
 
@@ -252,13 +257,13 @@ function shuffleDeck(array) {
             }
             f=0;
         }
-    //    deckOfCards = array;
-    //   makeCards();
-    //    flip();
+
         i++;
     }
     return array;
 }
+
+
 
  function rotateOneCard(idx) {
     console.log("card ix: " + idx);
@@ -284,33 +289,26 @@ function shuffleDeck(array) {
 
     /* calculate column hit */
     var clickCol = idx- (parseInt(idx/13)*13);
-
     var cardIs = deckOfCards[idx];
-
     var cardFaceIx = cardIs- (parseInt(cardIs/13)*13);
-
     var faceId = "cardface" + (idx+1);
     var cardFace = document.getElementById(faceId);
 
     var chit = columnHits[clickCol];
     chit += 1;
     columnHits[clickCol] = chit; 
+
+
+
+    
     if( cardFaceIx == clickCol) {
+        tallyPlayerPoints(chit);
         if( chit === 1) {
             console.log("Hit!");
-            //cardFace.setAttribute("background","blue");
             cardFace.style.background = "yellow";
-
         }
   
     }
-
-
-
-    /* calculate column hit END */    
-
- //   console.log(" after rotation: ");
- //   console.log("element rotation: " + card.style.transform);
  }
 
  function rotateThisCard(t) {
@@ -507,26 +505,9 @@ function shuffle(array) {
 */
 
 
-/*
 function shuffleCards() {
-    DeckOfCards = shuffle(deckOfCards);
-    makeCards();
-    console.log(deckOfCards);
-}
-*/
-
-function shuffleCards() {
- //   DeckOfCards = shuffleDeck(deckOfCards);
- //   DeckOfCards=randomizeCards(deckOfCards);
- //   columnHits = defaultColumnHits;
-    for(var i = 0; i<13; i++) {
-        columnHits[i] = 0;
-    }
-    console.dir(columnHits);
+    initGame();
     DeckOfCards = shuffleDeck(deckOfCards);
     makeCards();
- //   flip();
-
- //   console.log(deckOfCards);
 }
 
