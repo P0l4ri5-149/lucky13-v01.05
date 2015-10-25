@@ -284,16 +284,13 @@ function shuffleDeck(array) {
 
     /* calculate column hit */
     var clickCol = idx- (parseInt(idx/13)*13);
-    console.log( "column: ", + clickCol);
+
     var cardIs = deckOfCards[idx];
-    console.log( "card Click: " , cardIs);
+
     var cardFaceIx = cardIs- (parseInt(cardIs/13)*13);
-    console.log( "cardFace: " + cardFace);
 
     var faceId = "cardface" + (idx+1);
     var cardFace = document.getElementById(faceId);
-    console.log("Element:");
-    console.dir(cardFace);
 
     var chit = columnHits[clickCol];
     chit += 1;
@@ -303,17 +300,13 @@ function shuffleDeck(array) {
             console.log("Hit!");
             //cardFace.setAttribute("background","blue");
             cardFace.style.background = "yellow";
-            console.dir(cardFace);
+
         }
-        else {
-            console.log( "Not this one");
-        }   
-    }
-    else {
-        console.log(" oops");
+  
     }
 
-    console.dir(columnHits);
+
+
     /* calculate column hit END */    
 
  //   console.log(" after rotation: ");
@@ -525,7 +518,11 @@ function shuffleCards() {
 function shuffleCards() {
  //   DeckOfCards = shuffleDeck(deckOfCards);
  //   DeckOfCards=randomizeCards(deckOfCards);
-    columnHits = defaultColumnHits;
+ //   columnHits = defaultColumnHits;
+    for(var i = 0; i<13; i++) {
+        columnHits[i] = 0;
+    }
+    console.dir(columnHits);
     DeckOfCards = shuffleDeck(deckOfCards);
     makeCards();
  //   flip();
