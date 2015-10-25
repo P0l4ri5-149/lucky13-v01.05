@@ -1,53 +1,53 @@
 function createCard (x,soot,value, color, left, top) {
     // create the card div
+    var card = document.createElement("div");
 
-    var card = $('<div>').attr({
-        "onclick": "rotateThisCard(this)",
-        "class": "card ace" + x,
-        "id": "card" + x
-    }).css({
-        "left": left,
-        "top": top
-    })
+ // card.setAttribute("onclick", "rotateOneCard(this)");
+    card.setAttribute("onclick", "rotateThisCard(this)");
+    // card.className="card ace" + x;
+    card.setAttribute("class", "card ace" + x);
+    card.setAttribute("id", "card" + x);
+    card.style.left = left;
+    card.style.top = top;
+
+
     // create the face div
-    .append($('<div>').attr({
-        "class": "card-face"
-    }).css({
-        "color": color
-    }))
+    var cardFace = document.createElement("div");
+    cardFace.setAttribute("id", "cardface" + x);
+    cardFace.className="card-face";
+    cardFace.style.color = color;
+
     // create upper left div
-    .append($('<div>')
-        .attr({
-            "class": "card-face-ul"
-        })
-        .html(value)
-        .css({
-            "color": color
-        }))
+    var cardFaceUL = document.createElement("div");
+    cardFaceUL.className="card-face-ul";
+    cardFaceUL.innerHTML = value;
+    cardFaceUL.style.color= color;
+
     // create lower right div
-    .append($('<div>')
-        .attr({
-            "class": "card-face-lr"
-        })
-        .html(value)
-        .css({
-            "color": color
-        }))
+    var cardFaceLR = document.createElement("div");
+    cardFaceLR.className="card-face-lr";
+    cardFaceLR.innerHTML= value;
+    cardFaceLR.style.color=color;
+
     // add center to card face
-    .append($('<div>')
-        .attr({
-            "class": "card-center"
-        })
-        .html(soot)
-        .css({
-            "color": color
-        }))
+    var cardCenter = document.createElement("div");
+    cardCenter.className="card-center";
+    cardCenter.innerHTML=soot;
+    cardCenter.style.color=color;
+
+
     // create the back div
-    .append( $('<div>').addClass("card-back") );
+    var cardBack = document.createElement("div");
+    cardBack.className="card-back";
 
-
+    // add the back and face to the card
+    card.appendChild(cardFace);
+    card.appendChild(cardFaceUL); 
+    card.appendChild(cardCenter); 
+    card.appendChild(cardFaceLR);  
+    card.appendChild(cardBack);
     // return the card
-    return card[0];
+    return card;
 
 }
 
@@ -55,7 +55,7 @@ function createCardIcon (x,soot,value, color, left, top) {
     // create the card div
     var card = document.createElement("div");
     // card.className="card ace" + x;
-    card.setAttribute("class", "card icon");
+    card.setAttribute("class", "card icon" + x);
     card.setAttribute("id", "icon" + x);
     card.style.left = left;
     card.style.top = top;

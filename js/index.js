@@ -23,27 +23,22 @@ var deckRotation =  [00,00,00,00,00,00,00,00,00,00,00,00,00,     // spades
 
 
 var columnHits = [00,00,00,00,00,00,00,00,00,00,00,00,00];
-
+var selectedSuite = 0;
+var suiteMatches = 0;
+var aceKingMatches =  0;
+var playerBonus = 0;
 
 var playerPoints = 0;
-
-function tallyPlayerPoints(p) {
-    console.log("PlayerPoints before tally " + playerPoints);
-    switch(p) {
-        case 1: playerPoints += 10; break;
-        case 2: playerPoints += 5;  break;
-        case 3: playerPoints += 2;  break;
-        case 4: playerPoints += 1;  break;
-    }
-    var ppoints = document.getElementById("playerPoints");
-    ppoints.innerHTML = "Points: " + playerPoints;
-    
-    console.dir(columnHits);
-    console.log("PlayerPoints " + playerPoints);
-}
+var playerFirstTry = 0;
+var playerFinalTry = 0;
 
 function initGame() {
     playerPoints = 0;
+    playerFirstTry = 0;
+    playerFinalTry = 0;
+    suiteMatches = 0;
+    playerBonus = 0;
+    aceKingMatches =  0;
     for(var i = 0; i<13; i++) {
         columnHits[i] = 0;
     }
@@ -52,6 +47,67 @@ function initGame() {
     var ppoints = document.getElementById("playerPoints");
     ppoints.innerHTML = "";
 }
+
+
+function tallyPlayerPoints(p) {
+    console.log("PlayerPoints before tally " + playerPoints);
+    switch(p) {
+        case 1: playerPoints += 10; 
+                playerFirstTry += 1;
+                break;
+        case 2: playerPoints += 5;  break;
+        case 3: playerPoints += 2;  break;
+        case 4: playerPoints += 1;  
+                playerFinalTry += 1;
+                break;
+    }
+
+
+
+}
+
+function tallyPoints(idx) {
+    /* calculate column hit and tally points */
+   
+    var clickCol = idx- (parseInt(idx/13)*13);
+    var cardIs = deckOfCards[idx];
+    var cardSuite = parseInt(cardIs/13);
+
+    var cardFaceIx = cardIs- (parseInt(cardIs/13)*13);
+    var faceId = "cardface" + (idx+1);
+    var cardFace = document.getElementById(faceId);
+
+    var chit = columnHits[clickCol];
+    chit += 1;
+    columnHits[clickCol] = chit; 
+
+    
+    if( cardFaceIx == clickCol) {
+        aceKingMatches += 1;
+        tallyPlayerPoints(chit);
+        if(cardSuite === selectedSuite) {
+            suiteMatches += 1; 
+            playerBonus = aceKingMatches * suiteMatches;
+        }
+
+        var ppoints = document.getElementById("playerPoints");
+        if( (playerFinalTry === 13) || (playerFirstTry === 13) ) {
+            ppoints.innerHTML = "Lucky13 Win";
+        }
+        else {
+            var totalpoints = playerBonus + playerPoints;
+            ppoints.innerHTML = "Points: " + totalpoints;  
+        }
+ 
+        cardFace.style.background = "yellow";
+
+        console.log("playerPoints: " + playerPoints);
+        console.log("suiteMatches: " + suiteMatches);
+        console.log("aceKingMatches: " + aceKingMatches);
+        console.log("playerBonus: " + playerBonus);
+        console.log("totalpoints " + totalpoints);
+    }    
+} 
                  
 
 function randomizeCards(array) {
@@ -287,28 +343,7 @@ function shuffleDeck(array) {
 
     card.style.transform = "translate(-50%, -50%) rotateY(" + rot + "deg)";
 
-    /* calculate column hit */
-    var clickCol = idx- (parseInt(idx/13)*13);
-    var cardIs = deckOfCards[idx];
-    var cardFaceIx = cardIs- (parseInt(cardIs/13)*13);
-    var faceId = "cardface" + (idx+1);
-    var cardFace = document.getElementById(faceId);
-
-    var chit = columnHits[clickCol];
-    chit += 1;
-    columnHits[clickCol] = chit; 
-
-
-
-    
-    if( cardFaceIx == clickCol) {
-        tallyPlayerPoints(chit);
-        if( chit === 1) {
-            console.log("Hit!");
-            cardFace.style.background = "yellow";
-        }
-  
-    }
+    tallyPoints(idx);
  }
 
  function rotateThisCard(t) {
@@ -507,7 +542,68 @@ function shuffle(array) {
 
 function shuffleCards() {
     initGame();
+    selectSuite(selectedSuite);
     DeckOfCards = shuffleDeck(deckOfCards);
     makeCards();
 }
 
+function selectSuite(s) {
+    selectedSuite = s;
+    switch(s)
+    {
+        case 0:
+            var bx = document.getElementById("soot1");
+            bx.style.background = "yellow";
+            var bx = document.getElementById("soot2");
+            bx.style.background = "grey";
+            var bx = document.getElementById("soot3");
+            bx.style.background = "grey";
+            var bx = document.getElementById("soot4");
+            bx.style.background = "grey";                       
+        break;
+
+        case 1:
+            var bx = document.getElementById("soot1");
+            bx.style.background = "grey";
+            var bx = document.getElementById("soot2");
+            bx.style.background = "yellow";
+            var bx = document.getElementById("soot3");
+            bx.style.background = "grey";
+            var bx = document.getElementById("soot4");
+            bx.style.background = "grey";         
+        break;
+        case 2:
+            var bx = document.getElementById("soot1");
+            bx.style.background = "grey";
+            var bx = document.getElementById("soot2");
+            bx.style.background = "grey"; 
+            var bx = document.getElementById("soot3");
+            bx.style.background = "yellow";
+            var bx = document.getElementById("soot4");
+            bx.style.background = "grey";         
+        break;
+        case 3:
+            var bx = document.getElementById("soot1");
+            bx.style.background = "grey";
+            var bx = document.getElementById("soot2");
+            bx.style.background = "grey"; 
+            var bx = document.getElementById("soot3");
+            bx.style.background = "grey"; 
+            var bx = document.getElementById("soot4");
+            bx.style.background = "yellow";         
+        break;
+    }
+}
+
+function isSpades() {
+    selectSuite(0);
+}
+function isClubs() {
+    selectSuite(1);
+}
+function isHearts() {
+    selectSuite(2);
+}
+function isDiams() {
+    selectSuite(3);
+}
