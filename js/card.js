@@ -1,8 +1,9 @@
 function createCard (x,soot,value, color, left, top) {
     // create the card div
 
+
     var card = $('<div>').attr({
-        "onclick": "rotateOneCard(this)",
+        "onclick": "rotateThisCard(this)",
         "class": "card ace" + x,
         "id": "card" + x
     }).css({
@@ -13,7 +14,8 @@ function createCard (x,soot,value, color, left, top) {
     // create the face div
 
     .append($('<div>').attr({
-        "class": "card-face"
+        "class": "card-face",
+        "id": "cardface" + x
     }).css({
         "color": color
     }))

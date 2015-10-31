@@ -164,3 +164,28 @@ html, body {
     transform: translate(0, 0);
     font-size: 20px;
 }
+
+.playerPoints {
+    position: absolute;
+    left: 10%;
+    bottom: 0px;
+    transform: translate(0, 0);
+    font-size: 20px;
+}
+
+
+.playSuite {
+    position: absolute;
+    left:40px;
+    top: 10px;
+    transform: translate(0, 0);
+    font-size: 20px;    
+}
+
+.suitRed {
+    color: red;
+}
+
+.suitBlack {
+    color: black;
+}
