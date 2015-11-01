@@ -28,15 +28,8 @@ router.get('/deal', function (req,res){
 
 router.get('/card/:column/:row', function(req,res) {
 	console.log("Card request for column: ", req.params.column, " row: ", req.params.row);
-	res.json({ 
-		card: { 
-			value: "A",
-			soot: "spades"
-
-		},
-		column: req.params.column,
-		row: req.params.row
-	});
+	var card = lucky13.getCard( req.params.row, req.params.column );
+	res.json({ card: card });
 });
 
 // REGISTER OUR HTML --------------------------
