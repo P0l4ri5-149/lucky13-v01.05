@@ -1,0 +1,11 @@
+{
+  "name": "node_server_test",
+  "version": "0.0.1",
+  "description": "Learning how to use express for node.js",
+  "main": "server.js",
+  "author": "Ron Logan",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}

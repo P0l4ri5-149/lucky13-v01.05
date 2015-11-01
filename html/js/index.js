@@ -31,6 +31,10 @@ var playerBonus = 0;
 var playerPoints = 0;
 var playerFirstTry = 0;
 var playerFinalTry = 0;
+var advancedPlayIndex = 0;
+var advancedPlayMultiplier = 1;
+var playerClicks = 0;
+var gameOver = 0;
 
 function initGame() {
     playerPoints = 0;
@@ -39,6 +43,10 @@ function initGame() {
     suiteMatches = 0;
     playerBonus = 0;
     aceKingMatches =  0;
+    advancedPlayIndex = 1;          // for testing 
+    advancedPlayMultiplier = 1;
+    playerClicks = 0;
+    gameOver = 0;
     for(var i = 0; i<13; i++) {
         columnHits[i] = 0;
     }
@@ -47,12 +55,6 @@ function initGame() {
     var ppoints = document.getElementById("playerPoints");
     ppoints.innerHTML = "";
 }
-
-
- function rotateCard(id, rotation) {
-    var card = $("#card" + id);
-    card.css('transform',"translate(-50%, -50%) rotateY(" + rotation + "deg)");
- }
 
 
 function tallyPlayerPoints(p) {
@@ -74,7 +76,8 @@ function tallyPlayerPoints(p) {
 
 function tallyPoints(idx) {
     /* calculate column hit and tally points */
-   
+    var totalpoints=0;
+    playerClicks = playerClicks + 1;
     var clickCol = idx- (parseInt(idx/13)*13);
     var cardIs = deckOfCards[idx];
     var cardSuite = parseInt(cardIs/13);
@@ -107,227 +110,49 @@ function tallyPoints(idx) {
  
         cardFace.style.background = "yellow";
 
+
+    }  
+
+        switch(advancedPlayIndex) {
+            case 0: 
+                if(playerClicks == 52) {
+                    totalpoints *= 1;
+                    gameOver = 1;
+                }
+                break;
+            case 1: 
+                if(playerClicks == 39) {
+                    totalpoints *= 2;
+                    gameOver = 1;
+                }
+                break;
+            case 2: 
+                if(playerClicks == 26) {
+                    totalpoints *= 3;
+                    gameOver = 1;
+                }
+                break;
+            case 3: 
+                if(playerClicks == 13) {
+                    totalpoints *= 4;
+                    gameOver = 1;
+                }
+                break;
+        }
         console.log("playerPoints: " + playerPoints);
         console.log("suiteMatches: " + suiteMatches);
         console.log("aceKingMatches: " + aceKingMatches);
         console.log("playerBonus: " + playerBonus);
         console.log("totalpoints " + totalpoints);
-    }    
+        console.log("PlayerClicks: " + playerClicks);
 } 
+
+
                  
+function rotateOneCard(idx) {
 
-function randomizeCards(array) {
+    showCard(idx)
 
-  var currentIndex = array.length, temporaryValue, randomIndex ;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
-
-/*
- *  compareCard( cardIs, cardArg)
- *  return true if cardIs is of the same value regardless of suite
- *  I.E. if cardIs is 10 clubs, return true if card is a 10 of any suite
- *  example:
- *  we are looking for an Ace : cardIs = 0;
- *  and the argument is  Ace of Hearts = 26
- *  then we would return true
- *  returns false if card is not defined
- */
-function compareCard( cardIs, cardArg) {
-    var c=cardArg;
-    var result = 0;     // assume not
-    if( c < 52 ) 
-    {   // card not undefined
-        while( c > 12) {
-            c = c - 13;
-        }
-        if( c == cardIs) {
-            result = 1;
-        }
-        else {
-            result = 0;
-        }       
-    }
-
-    return result;
-} 
-
-/* findCardInColumn
- *  returns index into array for a matching card in the column
- *  returns -1 if card not found in column
- */
-function findCardInColumn( cardIs, column, array) {
-    var i,ix,c,match;
-    for( i=0; i<4; i++ ) {
-        ix = (i * 13) + column;
-        c = array[ix];
-
-        match = compareCard(cardIs, c);
-        if(match == 1) {
-            return ix;
-        }
-    }
-    return -1;
-} 
-
-/* findCardsInColumn
- * returns the number of cards of a paticular face in a column
- */
-
-function findFacesInColumn( cardIs, column, array) {
-    var i,ix,c,match;
-    var num_matches=0;
-    for( i=0; i<4; i++ ) {
-        ix = (i * 13) + column;
-        c = array[ix];
-
-        match = compareCard(column, c);
-        if(match == 1) {
-            num_matches = num_matches + 1;
-        }
-    }
-    return num_matches;
-}
-
-/*
- * FindCardInAnyColumn
- * starting at column until the end of the dec
- * see if cardIs is present
- * return index if found
- * return -1 if not found
- */
-
-function findCardInAnyColumn( cardIs, array) {
-    var i;
-    var found;
-    for(i=0; i<13; i++) {
-        found= findCardInColumn( cardIs, i, array);
-        if(found != -1) {
-           return found; // here is one
-        }
-    }
-    return -1;
-}
-
-
-/* cardsAreSwapable( f1, f2, array)
- * f1, f2 are indexes to two separate cards
- * the card in f1 must go into the column of f2
- * AND
- * the card in f2 must go into the column of f1
- */
-
-function cardsAreSwapable( f1, f2, array) {
-    var f;
-    var isSwap = 1;
-    var f1Column = f1 - (parseInt(f1/13)*13);
-    var f2Column = f2 - (parseInt(f2/13)*13);
-    var v1 = array[f1];
-    var v2 = array[f2];
-    f = compareCard(f1Column, v1);
-    if( f == 1) {   // v1 fits into f1 column
-        f = findFacesInColumn( v1, f1Column, array) // how many faces in that column? 
-        if( f < 2) {
-            return 0;   // there must be at least two of them 
-        }    
-    }
-    f = compareCard(f2Column, v2);
-    if( f == 1) {   // v2 fits into f2 column
-        f = findFacesInColumn( v2, f2Column, array) // how many faces in that column? 
-        if( f < 2) {
-            return 0;   // there must be at least two of them 
-        }  
-    }
-    f = compareCard(f1Column, v2);
-    if( f == 1)  {  // f2 fits into f1 column
-        f = findFacesInColumn( v2, f1Column, array) // how many faces in that column? 
-        if( f > 0) {
-            return 0;   // there is already at least one in that column
-        }         
-    }
-    f = compareCard(f2Column, v1);
-    if( f == 1)  {  // f2 fits into f1 column
-        f = findFacesInColumn( v1, f2Column, array) // how many faces in that column? 
-        if( f > 0) {
-            return 0;   // there is already at least one in that column
-        }         
-    }  
-    return 1; 
-}
-
-function swapCardWithAnyOtherColumn(col,found,array) {
-    var v1,v2,ix,randomRow;
-    var f=0;
-    var randomColumn=col;
-    v2 = array[found];
-    while( f === 0) {
-        while( randomColumn === col) {                  // pick a random column that is not this column
-            randomColumn = Math.floor(Math.random() * 13);   // make a number between 0 and 12
-        }
-        randomRow = Math.floor(Math.random() * 4);      // pick a random row
-        ix = randomRow * 13 + randomColumn;             // compute the cell addres
-        v1 = array[ix];
-        f = cardsAreSwapable( ix, found, array);
-    }
-    array[ix] = v2;                             // now swap them
-    array[found] = v1;
-}
-
-function shuffleDeck(array) {
-    /* first randomize the cards */
-    randomizeCards(array);
-
-    /* then sort to re-order according to alignments with columns */
-    var i,randomRow,ix,v1,v2,found,f;
-    i=0;
-    f=0;
-    while(i<13) {
-        f = findFacesInColumn( i, i, array);
-        if( f !== 0) {
-            while( f > 1) {
-                found = findCardInColumn( i, i, array);
-                swapCardWithAnyOtherColumn(i,found,array);
-                f = findFacesInColumn( i, i, array);
-            }
-            f = 0;
-        }
-        else {     // we need to find the card an a different column and exchange it
-            while( f===0 ) {
-                found = findCardInAnyColumn( i,  array );
-                randomRow = Math.floor(Math.random() * 4);
-                ix = randomRow*13 + i;
-                f = cardsAreSwapable( ix, found, array);
-                if( f==1 ) {
-                    v1 = array[ix];
-                    v2 = array[found];
-                    array[ix] = v2;
-                    array[found] = v1;
-                }
-            }
-            f=0;
-        }
-
-        i++;
-    }
-    return array;
-}
-
-
-
- function rotateOneCard(idx) {
     console.log("card ix: " + idx);
 
     var id = "card" + (idx+1);
@@ -344,12 +169,8 @@ function shuffleDeck(array) {
     }
 
     deckRotation[idx] = r;
-
     var card = document.getElementById(id);
-
     card.style.transform = "translate(-50%, -50%) rotateY(" + rot + "deg)";
-
-    tallyPoints(idx);
  }
 
  function rotateThisCard(t) {
@@ -366,8 +187,10 @@ function shuffleDeck(array) {
  }
 
   function applyRotation(rotation) {
-
-  $(".card:not(.icon)").css('transform',"translate(-50%, -50%) rotateY(" + rotation + "deg)");
+    for(var i=1; i< cardnum; i++)
+    {
+        rotateCard(i,rotation);
+    }
 
  }
 
@@ -387,19 +210,27 @@ function shuffleDeck(array) {
 
  function flip() {
     console.log("Flip clicked.");
-    var r = rotation === 0 ? 0 : 1;
-    rotation = rotation === 0 ? 180 : 0;
-
-    deckRotation = _.map( deckRotation, r);
-
+    if(rotation === 0) {
+        rotation = 180;
+        for( var i = 0; i < 52; i++){
+            deckRotation[i] = 0;
+        }
+    } else {
+        rotation = 0;
+        for( var i = 0; i < 52; i++){
+            deckRotation[i] = 1;
+        }
+    }
+    // rotation = rotation + 180;
     applyRotation(rotation);   
 };
 
 function resetGame() {
     rotation = 180;
     applyRotation(rotation);
-    deckRotation = _.map(deckRotation, function(){ return 0; });
-
+    for( var i = 0; i < 52; i++){
+        deckRotation[i] = 0;
+    }
 }
 
 /* new stuff for many cards */
@@ -468,6 +299,68 @@ function makeCardRows() {
  
 }
 
+function showCard(i) {
+    var card,left,top,face,suite;
+    var i,n,f,s,color,id;
+    var id,node,NodeList;
+    var row,column,idx;
+
+    row = parseInt(i/13);
+    column = i - (row*13);
+
+    idx = deckOfCards[i];     // read the card in this position
+
+        s= parseInt(idx/13);      // compute the suit
+        switch(s) {         // determine color and shape
+            case 0: suite="&spades;"; 
+                    color="black";      break;
+            case 1: suite="&clubs;";  
+                    color="black";      break;
+            case 2: suite="&hearts;"; 
+                    color="red";        break;
+            case 3: suite="&diams;";  
+                     color="red";        break;
+        }
+        f = (idx-(s*13))+1;       // card index of suite
+        switch(f) {
+            case 1:  face="A";    break;
+            case 11: face="J";   break;
+            case 12: face="Q";   break;
+            case 13: face="K";   break;
+            default: face= f;    break;
+        } 
+        left = (column * 60) + 33 + "px";
+        switch(row) {
+            case 0: top = "148px";    break;
+            case 1: top = "246px";    break;
+            case 2: top = "344px";    break;
+            case 3: top = "442px";    break;
+        }      
+
+       id = "card" + (i+1);
+       card = document.getElementById(id);
+       card.style.color = color;
+
+        card.style.left = left;
+        card.style.top  = top;
+
+       NodeList = card.childNodes;
+       node = NodeList[1];          // upper left
+       node.innerHTML = face;
+
+       node = NodeList[2];          // center
+       node.innerHTML = suite;
+
+       node = NodeList[3];          // lower right
+       node.innerHTML = face;
+
+}
+
+function populateCards() {
+    for(var i=0;i<52;i++) { 
+        showCard(i);  
+    }
+}
 
 function makeHeadRow() {
     var leftstr;
@@ -512,28 +405,6 @@ function clearCards() {
     var main = document.getElementById("board");
     main.innerHTML = null;
 }
-
-/*
-function shuffle(array) {
-
-  var currentIndex = array.length, temporaryValue, randomIndex ;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
-*/
 
 
 function shuffleCards() {
@@ -602,4 +473,23 @@ function isHearts() {
 }
 function isDiams() {
     selectSuite(3);
+}
+
+
+
+
+
+function getCards() {
+    $.ajax({
+        url: "api/deal"
+    }).done( function( data) {
+        console.log("We got ", data, "for our cards!");
+     //   deckOfCards = data;
+     //   console.dir(deckOfCards);
+        for(var i=0; i<52; i++) {
+            deckOfCards[i] = data.cards[i];
+        }
+        console.log("deckOfCards ");
+        console.dir(deckOfCards);
+    });
 }

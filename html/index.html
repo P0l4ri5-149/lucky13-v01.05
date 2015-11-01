@@ -32,8 +32,9 @@
                         <button  class="suitRed" id="soot4" onclick="isDiams()">&diams;</button>
                 </div>
                 <div class="buttons">
+                    <button onclick="populateCards()">populate</button>
+                    <button onclick="getCards()">Get Cards</button>
                     <button onclick="makeCards()">Make Cards</button>
-                    <button onclick="shuffleCards()">Shuffle Cards</button>
                     <button onclick="resetGame()">Reset</button>
                     <button onclick="clearCards()" style="display:none;">Clear Cards</button>
                     <button onclick="turnLeft()" style="display:none;">Left</button>
@@ -45,7 +46,9 @@
             </div> <!-- end main-header -->
 
             <div class="main-content" id="board">
-
+            <!--
+                <img class="card-back" src="resource/svg/file.svg" alt="Back of card">
+            -->
             </div> <!-- end main-content -->
 
         </div> <!-- end wrapper -->
