@@ -6,16 +6,17 @@
  */
 
 
+
     var rotation = 180;
     var cardnum=1;
-/*                   A   2  3  4  5  6  7  8  9 10 J  Q  K */
+/*                   A   2  3  4  5  6  7  8  9 10 J  Q  K 
 var defaultCards =  [00,01,02,03,04,05,06,07,08,09,10,11,12,     // spades
                      13,14,15,16,17,18,19,20,21,22,23,24,25,     // clubs
                      26,27,28,29,30,31,32,33,34,35,36,37,38,     // hearts
                      39,40,41,42,43,44,45,46,47,48,49,50,51,];   // diams
 
 var deckOfCards = defaultCards; 
-                    
+*/                  
 var deckRotation =  [00,00,00,00,00,00,00,00,00,00,00,00,00,     // spades
                      00,00,00,00,00,00,00,00,00,00,00,00,00,     // clubs
                      00,00,00,00,00,00,00,00,00,00,00,00,00,     // hearts
@@ -35,6 +36,7 @@ var advancedPlayIndex = 0;
 var advancedPlayMultiplier = 1;
 var playerClicks = 0;
 var gameOver = 0;
+
 
 function initGame() {
     playerPoints = 0;
@@ -74,12 +76,12 @@ function tallyPlayerPoints(p) {
 
 }
 
-function tallyPoints(idx) {
+function tallyPoints(idx,cardIs) {
     /* calculate column hit and tally points */
     var totalpoints=0;
     playerClicks = playerClicks + 1;
     var clickCol = idx- (parseInt(idx/13)*13);
-    var cardIs = deckOfCards[idx];
+
     var cardSuite = parseInt(cardIs/13);
 
     var cardFaceIx = cardIs- (parseInt(cardIs/13)*13);
@@ -147,11 +149,62 @@ function tallyPoints(idx) {
         console.log("PlayerClicks: " + playerClicks);
 } 
 
+    var faces = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+    var suits = ["&spades;","&clubs;","&hearts;","&diams;"]; 
+  
 
-                 
-function rotateOneCard(idx) {
+function showCard(i,card) {
+    var card,left,top,face,soot;
+    var i,n,f,s,color,id;
+    var id,node,NodeList;
+    var row,column,idx;
+    row = parseInt(i/13);
+    column = i - (row*13);
+    var cardSoot;
+    var cardFace;
+    var cardId;
 
-    showCard(idx)
+    cardFace=card.face;
+    cardSoot=card.suit;
+    cardId=card.id;
+    soot = suits[cardSoot];
+    face = faces[cardFace];
+    if( cardSoot < 2 ) {
+        color="black"; 
+    }
+    else {
+        color="red";
+    }
+
+    left = (column * 60) + 33 + "px";
+    switch(row) {
+        case 0: top = "148px";    break;
+        case 1: top = "246px";    break;
+        case 2: top = "344px";    break;
+        case 3: top = "442px";    break;
+    }      
+
+    id = "card" + (i+1);
+    card = document.getElementById(id);
+    card.style.color = color;
+    card.style.left = left;
+    card.style.top  = top;
+
+    NodeList = card.childNodes;
+    node = NodeList[1];          // upper left
+    node.innerHTML = face;
+
+    node = NodeList[2];          // center
+    node.innerHTML = soot;
+
+    node = NodeList[3];          // lower right
+    node.innerHTML = face;
+    return cardId;
+}
+
+
+function rotateOneCard(idx,card) {
+    var cardIs = showCard(idx,card);
 
     console.log("card ix: " + idx);
 
@@ -171,6 +224,8 @@ function rotateOneCard(idx) {
     deckRotation[idx] = r;
     var card = document.getElementById(id);
     card.style.transform = "translate(-50%, -50%) rotateY(" + rot + "deg)";
+
+    tallyPoints(idx,cardIs);
  }
 
  function rotateThisCard(t) {
@@ -178,35 +233,26 @@ function rotateOneCard(idx) {
     var id = t.id;
     var idnum = id.slice(4,id.length);
     var idx = idnum-1;
-    rotateOneCard(idx);
+    var row = parseInt(idx/13);
+    var column = idx - (row*13);
+    getOneCard(row, column, function(card){
+        rotateOneCard(idx,card);
+    });
+
  }
 
-  function rotateCard(id, rotation) {
+function rotateCard(id, rotation) {
     var card = document.getElementById("card" + id);
     card.style.transform = "translate(-50%, -50%) rotateY(" + rotation + "deg)";
  }
 
-  function applyRotation(rotation) {
+function applyRotation(rotation) {
     for(var i=1; i< cardnum; i++)
     {
         rotateCard(i,rotation);
     }
 
  }
-
- function turnLeft() {
-    console.log("Turn left clicked.");
-    var card = document.getElementById("card1");
-    rotation = rotation - 30;
-    applyRotation(rotation); 
- };
-
- function turnRight() {
-    console.log("Turn right clicked.");
-    var card = document.getElementById("card1");
-    rotation = rotation + 30;
-    applyRotation(rotation); 
- };
 
  function flip() {
     console.log("Flip clicked.");
@@ -233,10 +279,6 @@ function resetGame() {
     }
 }
 
-/* new stuff for many cards */
-
-
-//console.log(deckOfCards);
 
 function makeCardRows() {
     var leftstr;
@@ -254,26 +296,6 @@ function makeCardRows() {
     cardnum=1;
     for(i=0;i<52;i++)
     {   
-        n = deckOfCards[i];     // read the card in this position
-        s= parseInt(n/13);      // compute the suit
-            switch(s) {         // determine color and shape
-                case 0: suite="&spades;"; 
-                        color="black";      break;
-                case 1: suite="&clubs;";  
-                        color="black";      break;
-                case 2: suite="&hearts;"; 
-                        color="red";        break;
-                case 3: suite="&diams;";  
-                        color="red";        break;
-            }
-        f = (n-(s*13))+1;       // card index of suite
-         switch(f) {
-            case 1: facestr="A";    break;
-            case 11: facestr="J";   break;
-            case 12: facestr="Q";   break;
-            case 13: facestr="K";   break;
-            default: facestr= f;    break;
-        }       
         leftstr = (column * 60) + 33 + "px";
         switch(row) {
             case 0: top = "148px";    break;
@@ -281,10 +303,9 @@ function makeCardRows() {
             case 2: top = "344px";    break;
             case 3: top = "442px";    break;
         }
-        cardx= createCard( cardnum, suite, facestr, color, leftstr, top);
+        cardx= createCard( cardnum, 0, 0, 0, leftstr, top);
         main.appendChild(cardx);
 
-     //   cardx.style.transform = "translate(-50%, -50%) rotateY(180deg)";
         deckRotation[cardnum-1]=0;
         cardnum=cardnum+1;  
         column = column+1;
@@ -299,62 +320,7 @@ function makeCardRows() {
  
 }
 
-function showCard(i) {
-    var card,left,top,face,suite;
-    var i,n,f,s,color,id;
-    var id,node,NodeList;
-    var row,column,idx;
 
-    row = parseInt(i/13);
-    column = i - (row*13);
-
-    idx = deckOfCards[i];     // read the card in this position
-
-        s= parseInt(idx/13);      // compute the suit
-        switch(s) {         // determine color and shape
-            case 0: suite="&spades;"; 
-                    color="black";      break;
-            case 1: suite="&clubs;";  
-                    color="black";      break;
-            case 2: suite="&hearts;"; 
-                    color="red";        break;
-            case 3: suite="&diams;";  
-                     color="red";        break;
-        }
-        f = (idx-(s*13))+1;       // card index of suite
-        switch(f) {
-            case 1:  face="A";    break;
-            case 11: face="J";   break;
-            case 12: face="Q";   break;
-            case 13: face="K";   break;
-            default: face= f;    break;
-        } 
-        left = (column * 60) + 33 + "px";
-        switch(row) {
-            case 0: top = "148px";    break;
-            case 1: top = "246px";    break;
-            case 2: top = "344px";    break;
-            case 3: top = "442px";    break;
-        }      
-
-       id = "card" + (i+1);
-       card = document.getElementById(id);
-       card.style.color = color;
-
-        card.style.left = left;
-        card.style.top  = top;
-
-       NodeList = card.childNodes;
-       node = NodeList[1];          // upper left
-       node.innerHTML = face;
-
-       node = NodeList[2];          // center
-       node.innerHTML = suite;
-
-       node = NodeList[3];          // lower right
-       node.innerHTML = face;
-
-}
 
 function populateCards() {
     for(var i=0;i<52;i++) { 
@@ -392,9 +358,8 @@ function makeHeadRow() {
 }
 
 function makeCards() {
-
-    deckOfCards = defaultCards;
     clearCards();
+    initGame();
     cardnum = 1;
     makeHeadRow();
     makeCardRows();
@@ -410,7 +375,6 @@ function clearCards() {
 function shuffleCards() {
     initGame();
     selectSuite(selectedSuite);
-    DeckOfCards = shuffleDeck(deckOfCards);
     makeCards();
 }
 
@@ -477,19 +441,22 @@ function isDiams() {
 
 
 
+function getOneCard(row, column,callback) {
+    $.ajax({
+        url: "/api/card/" + column + "/" + row
+    }).done( function( data) {
+        console.log("We got our card: ");
+        console.dir(data);
+        callback(data.card);
+    });   
 
+}
 
 function getCards() {
     $.ajax({
         url: "api/deal"
     }).done( function( data) {
         console.log("We got ", data, "for our cards!");
-     //   deckOfCards = data;
-     //   console.dir(deckOfCards);
-        for(var i=0; i<52; i++) {
-            deckOfCards[i] = data.cards[i];
-        }
-        console.log("deckOfCards ");
-        console.dir(deckOfCards);
+
     });
 }

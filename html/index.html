@@ -16,7 +16,7 @@
         <script src="js/index.js"></script>
 
     </head>
-    <body>
+    <body onload="makeCards()">
         <div class="wrapper">
 
             <div class="main-header">
@@ -32,10 +32,10 @@
                         <button  class="suitRed" id="soot4" onclick="isDiams()">&diams;</button>
                 </div>
                 <div class="buttons">
-                    <button onclick="populateCards()">populate</button>
-                    <button onclick="getCards()">Get Cards</button>
+                    <button onclick="populateCards()" style="display:none;">populate</button>
+                    <button onclick="getCards()" style="display:none;">Get Cards</button>
                     <button onclick="makeCards()">Make Cards</button>
-                    <button onclick="resetGame()">Reset</button>
+                    <button onclick="resetGame()" style="display:none;">Reset</button>
                     <button onclick="clearCards()" style="display:none;">Clear Cards</button>
                     <button onclick="turnLeft()" style="display:none;">Left</button>
                     <button onclick="turnRight()" style="display:none;">Right</button>
