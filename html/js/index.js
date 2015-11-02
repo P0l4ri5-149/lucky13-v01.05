@@ -22,132 +22,12 @@ var deckRotation =  [00,00,00,00,00,00,00,00,00,00,00,00,00,     // spades
                      00,00,00,00,00,00,00,00,00,00,00,00,00,     // hearts
                      00,00,00,00,00,00,00,00,00,00,00,00,00,];   // diams 
 
-
-var columnHits = [00,00,00,00,00,00,00,00,00,00,00,00,00];
-var selectedSuite = 0;
-var suiteMatches = 0;
-var aceKingMatches =  0;
-var playerBonus = 0;
-
-var playerPoints = 0;
-var playerFirstTry = 0;
-var playerFinalTry = 0;
-var advancedPlayIndex = 0;
-var advancedPlayMultiplier = 1;
-var playerClicks = 0;
-var gameOver = 0;
-
-
 function initGame() {
-    playerPoints = 0;
-    playerFirstTry = 0;
-    playerFinalTry = 0;
-    suiteMatches = 0;
-    playerBonus = 0;
-    aceKingMatches =  0;
-    advancedPlayIndex = 1;          // for testing 
-    advancedPlayMultiplier = 1;
-    playerClicks = 0;
-    gameOver = 0;
-    for(var i = 0; i<13; i++) {
-        columnHits[i] = 0;
-    }
     rotation = 180;
     cardnum = 1;
     var ppoints = document.getElementById("playerPoints");
     ppoints.innerHTML = "";
 }
-
-
-function tallyPlayerPoints(p) {
-    console.log("PlayerPoints before tally " + playerPoints);
-    switch(p) {
-        case 1: playerPoints += 10; 
-                playerFirstTry += 1;
-                break;
-        case 2: playerPoints += 5;  break;
-        case 3: playerPoints += 2;  break;
-        case 4: playerPoints += 1;  
-                playerFinalTry += 1;
-                break;
-    }
-
-
-
-}
-
-function tallyPoints(idx,cardIs) {
-    /* calculate column hit and tally points */
-    var totalpoints=0;
-    playerClicks = playerClicks + 1;
-    var clickCol = idx- (parseInt(idx/13)*13);
-
-    var cardSuite = parseInt(cardIs/13);
-
-    var cardFaceIx = cardIs- (parseInt(cardIs/13)*13);
-    var faceId = "cardface" + (idx+1);
-    var cardFace = document.getElementById(faceId);
-
-    var chit = columnHits[clickCol];
-    chit += 1;
-    columnHits[clickCol] = chit; 
-
-    
-    if( cardFaceIx == clickCol) {
-        aceKingMatches += 1;
-        tallyPlayerPoints(chit);
-        if(cardSuite === selectedSuite) {
-            suiteMatches += 1; 
-            playerBonus = aceKingMatches * suiteMatches;
-        }
-
-        var ppoints = document.getElementById("playerPoints");
-        if( (playerFinalTry === 13) || (playerFirstTry === 13) ) {
-            ppoints.innerHTML = "Lucky13 Win";
-        }
-        else {
-            var totalpoints = playerBonus + playerPoints;
-            ppoints.innerHTML = "Points: " + totalpoints;  
-        }
- 
-        cardFace.style.background = "yellow";
-
-
-    }  
-
-        switch(advancedPlayIndex) {
-            case 0: 
-                if(playerClicks == 52) {
-                    totalpoints *= 1;
-                    gameOver = 1;
-                }
-                break;
-            case 1: 
-                if(playerClicks == 39) {
-                    totalpoints *= 2;
-                    gameOver = 1;
-                }
-                break;
-            case 2: 
-                if(playerClicks == 26) {
-                    totalpoints *= 3;
-                    gameOver = 1;
-                }
-                break;
-            case 3: 
-                if(playerClicks == 13) {
-                    totalpoints *= 4;
-                    gameOver = 1;
-                }
-                break;
-        }
-        console.log("playerPoints: " + playerPoints);
-        console.log("suiteMatches: " + suiteMatches);
-        console.log("aceKingMatches: " + aceKingMatches);
-        console.log("playerBonus: " + playerBonus);
-        console.log("totalpoints " + totalpoints);
-        console.log("PlayerClicks: " + playerClicks);
-} 
 
     var faces = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
     var suits = ["&spades;","&clubs;","&hearts;","&diams;"]; 
@@ -203,7 +83,7 @@ function showCard(i,card) {
 }
 
 
-function rotateOneCard(idx,card) {
+function rotateOneCard( idx, card ) {
     var cardIs = showCard(idx,card);
 
     console.log("card ix: " + idx);
@@ -224,8 +104,6 @@ function rotateOneCard(idx,card) {
     deckRotation[idx] = r;
     var card = document.getElementById(id);
     card.style.transform = "translate(-50%, -50%) rotateY(" + rot + "deg)";
-
-    tallyPoints(idx,cardIs);
  }
 
  function rotateThisCard(t) {
@@ -380,73 +258,60 @@ function shuffleCards() {
 
 function selectSuite(s) {
     selectedSuite = s;
-    switch(s)
-    {
-        case 0:
-            var bx = document.getElementById("soot1");
-            bx.style.background = "yellow";
-            var bx = document.getElementById("soot2");
-            bx.style.background = "grey";
-            var bx = document.getElementById("soot3");
-            bx.style.background = "grey";
-            var bx = document.getElementById("soot4");
-            bx.style.background = "grey";                       
-        break;
+    var buttonId = "soot" + (s + 1);
 
-        case 1:
-            var bx = document.getElementById("soot1");
-            bx.style.background = "grey";
-            var bx = document.getElementById("soot2");
-            bx.style.background = "yellow";
-            var bx = document.getElementById("soot3");
-            bx.style.background = "grey";
-            var bx = document.getElementById("soot4");
-            bx.style.background = "grey";         
-        break;
-        case 2:
-            var bx = document.getElementById("soot1");
-            bx.style.background = "grey";
-            var bx = document.getElementById("soot2");
-            bx.style.background = "grey"; 
-            var bx = document.getElementById("soot3");
-            bx.style.background = "yellow";
-            var bx = document.getElementById("soot4");
-            bx.style.background = "grey";         
-        break;
-        case 3:
-            var bx = document.getElementById("soot1");
-            bx.style.background = "grey";
-            var bx = document.getElementById("soot2");
-            bx.style.background = "grey"; 
-            var bx = document.getElementById("soot3");
-            bx.style.background = "grey"; 
-            var bx = document.getElementById("soot4");
-            bx.style.background = "yellow";         
-        break;
-    }
+    $("#"+buttonId).css("background", "yellow").siblings().css("background", "grey");
 }
 
 function isSpades() {
+    setSuit(0);
     selectSuite(0);
 }
 function isClubs() {
+    setSuit(1);
     selectSuite(1);
 }
 function isHearts() {
+    setSuit(2);
     selectSuite(2);
 }
 function isDiams() {
+    setSuit(3);
     selectSuite(3);
 }
 
+function getCardIndex( row, col ) {
+    var ir = parseInt(row);
+    var ic = parseInt(col);
+    return (ir*13) + ic;
+};
 
-
-function getOneCard(row, column,callback) {
+function getOneCard( row, column, callback ) {
     $.ajax({
-        url: "/api/card/" + column + "/" + row
-    }).done( function( data) {
-        console.log("We got our card: ");
+        url: "/api/play/" + column + "/" + row
+    }).done( function( data ) {
+        console.log("We got our card: ", data.card);
         console.dir(data);
+        console.log("score: ", data.score.points);
+        console.log("playerPoints: " + data.score.playerPoints);
+        console.log("suiteMatches: " + data.score.suiteMatches);
+        console.log("aceKingMatches: " + data.score.aceKingMatches);
+        console.log("playerBonus: " + data.score.playerBonus);
+        console.log("totalpoints " + data.score.totalpoints);
+        console.log("PlayerClicks: " + data.score.playerClicks);
+
+        if( data.score.points ) {
+            var ppoints = document.getElementById("playerPoints");
+            ppoints.innerHTML = data.score.points;
+        }
+
+        if( data.isColCard == true ) {
+            var UICardId = getCardIndex( row, column );
+            var faceId = "cardface" + ( UICardId + 1 );
+            var cardFace = document.getElementById(faceId); 
+            cardFace.style.background = "yellow";
+        }
+
         callback(data.card);
     });   
 
@@ -458,5 +323,35 @@ function getCards() {
     }).done( function( data) {
         console.log("We got ", data, "for our cards!");
 
+    });
+}
+
+function deal() {
+    getSuit( function( suit ) {
+        selectSuite(suit);
+    });
+
+    $.ajax({
+        url: "api/deal"
+    }).done( function( data ) {
+        makeCards();
+    });
+}
+
+function setSuit( suit ) {
+    $.ajax({
+        url: "api/suit",
+        type: "PUT",
+        data: { suit: suit }
+    }).done( function( result ) {
+        console.log("Results of set suit: ", result );
+    });
+}
+
+function getSuit( callback ) {
+    $.ajax({
+        url: "api/suit"
+    }).done( function( data ) {
+        callback( data.suit );
     });
 }

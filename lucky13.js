@@ -1,18 +1,61 @@
 
+function getCardIndex( row, col ) {
+	var ir = parseInt(row);
+	var ic = parseInt(col);
+	return (ir*13) + ic;
+};
+
 var lucky13 = {
 /*                   A   2  3  4  5  6  7  8  9 10 J  Q  K */
 
+	// the cards
     cards: [],
+
+    // scoring
+	columnHits: [00,00,00,00,00,00,00,00,00,00,00,00,00],
+	selectedSuite: 				0,
+	suiteMatches: 				0,
+	aceKingMatches: 			0,
+	playerBonus: 				0,
+
+	playerPoints: 				0,
+	playerFirstTry: 			0,
+	playerFinalTry: 			0,
+	advancedPlayIndex: 			0,
+	advancedPlayMultiplier: 	1,
+	playerClicks: 				0,
+	gameOver: 					0,
+
 
     faces: ["A","2","3","4","5","6","7","8","9","10","J","Q","K"],
    	suits: ["&spades;","&clubs;","&hearts;","&diams"],
+
+   	/************************************************************
+   	 *		For external use
+   	 ************************************************************/
 
 	init: function() {
 		// make cards logic here
 		console.log("Initializing the lucky13 game.");
 
 		var cardId = 0;
+
+		// clear cards
 		this.cards = [];
+
+		// clear scores
+		this.columnHits = [00,00,00,00,00,00,00,00,00,00,00,00,00];
+		this.suiteMatches = 0;
+		this.aceKingMatches =  0;
+		this.playerBonus = 0;
+
+		this.playerPoints = 0;
+		this.playerFirstTry = 0;
+		this.playerFinalTry = 0;
+		this.advancedPlayIndex = 0;
+		this.advancedPlayMultiplier = 1;
+		this.playerClicks = 0;
+		this.gameOver = 0;
 
 		for( var soot = 0; soot < 4; soot++ ) {
 			for( var value = 0; value < 13; value++ ) {
@@ -32,24 +75,55 @@ var lucky13 = {
 	},
 
 	getCard: function( row, col ) {
-		var ir = parseInt(row);
-		var ic = parseInt(col);
-		var ix = (ir*13) + ic;
+		var ix = getCardIndex( row, col );
 		var card = this.cards[ix];
 		var retCard = {
 			id: card.id,
 			suit: card.suit,
 			face: card.face,
-			row: ir,
-			column: ic
+			row: row,
+			column: col
 		};
 		return retCard;
+	},
+
+	playCard: function( row, col ) {
+		var card = this.getCard( row, col );
+    	return this.tallyPoints( card );
 	},
 
 	getCards: function() {
 		return this.cards;
 	},
 
+	deal: function() {
+		// shuffle cards logic here
+		this.init();
+		this.shuffleDeck();
+		return this.cards;
+	},
+
+	setSuit: function( suit ) {
+		if(!isNaN(suit)) { suit = parseInt(suit); };
+		if( suit >= 0 && suit < 4 ) {
+			this.selectedSuite = suit;
+		} else {
+			switch( suit ) {
+				case "spades" 	: this.selectedSuite = 0; break;
+				case "clubs" 	: this.selectedSuite = 1; break;
+				case "hearts"	: this.selectedSuite = 2; break;
+				case "diamonds" : this.selectedSuite = 3; break;
+			}
+		}
+	},
+
+	getSuit: function() {
+		return { suit: this.selectedSuite };
+	},
+
+   	/************************************************************
+   	 *		For internal use
+   	 ************************************************************/
 
 	/*
 	 *  compareCard( cardIs, cardArg)
@@ -258,13 +332,106 @@ var lucky13 = {
 	    return this;
 	},
 
-	deal: function() {
-		// shuffle cards logic here
-		this.init();
-		this.shuffleDeck();
-		return this.cards;
-	}
+	tallyPoints: function ( card ) {
+	    /* calculate column hit and tally points */
+	    var totalpoints=0;
+	    this.playerClicks++;
+	    var clickCol = card.column;
 
+	    var cardSuite = card.suit;
+
+	    var cardFaceIx = card.face;
+
+	    var chit = this.columnHits[clickCol];
+	    chit += 1;
+	    this.columnHits[clickCol] = chit; 
+
+	    var isColCard = false;
+	    
+	    if( cardFaceIx == clickCol) {
+	        this.aceKingMatches += 1;
+	        this.tallyPlayerPoints(chit);
+	        if(cardSuite === this.selectedSuite) {
+	            this.suiteMatches += 1; 
+	            this.playerBonus = this.aceKingMatches * this.suiteMatches;
+	        }
+
+	        var pointsString = "";
+	        if( ( this.playerFinalTry === 13) || ( this.playerFirstTry === 13) ) {
+	            pointsString = "Lucky13 Win";
+	        }
+	        else {
+	            totalpoints = this.playerBonus + this.playerPoints;
+	            pointsString = "Points: " + totalpoints;  
+	        }
+
+	        isColCard = true;
+	    }  
+
+        switch(this.advancedPlayIndex) {
+            case 0: 
+                if(this.playerClicks == 52) {
+                    totalpoints *= 1;
+                    this.gameOver = 1;
+                }
+                break;
+            case 1: 
+                if(this.playerClicks == 39) {
+                    totalpoints *= 2;
+                    this.gameOver = 1;
+                }
+                break;
+            case 2: 
+                if(this.playerClicks == 26) {
+                    totalpoints *= 3;
+                    this.gameOver = 1;
+                }
+                break;
+            case 3: 
+                if(this.playerClicks == 13) {
+                    totalpoints *= 4;
+                    this.gameOver = 1;
+                }
+                break;
+        }
+        // console.log("playerPoints: " + this.playerPoints);
+        // console.log("suiteMatches: " + this.suiteMatches);
+        // console.log("aceKingMatches: " + this.aceKingMatches);
+        // console.log("playerBonus: " + this.playerBonus);
+        // console.log("totalpoints " + totalpoints);
+        // console.log("PlayerClicks: " + this.playerClicks);
+
+        var result = {
+        	card: card,
+        	isColCard: isColCard,
+        	score: {
+	        	points: pointsString,
+	        	playerPoints: this.playerPoints,
+	        	suiteMatches: this.suiteMatches,
+	        	aceKingMatches: this.aceKingMatches,
+	        	playerBonus: this.playerBonus,
+	        	totalpoints: totalpoints,
+	        	playerClicks: this.playerClicks,
+	        	gameOver: this.gameOver
+	        }
+        };
+
+        return result;
+	},
+
+	tallyPlayerPoints: function(p) {
+	    console.log("PlayerPoints before tally " + this.playerPoints);
+	    switch(p) {
+	        case 1: this.playerPoints += 10; 
+	                this.playerFirstTry += 1;
+	                break;
+	        case 2: this.playerPoints += 5;  break;
+	        case 3: this.playerPoints += 2;  break;
+	        case 4: this.playerPoints += 1;  
+	                this.playerFinalTry += 1;
+	                break;
+	    }
+    }
 };
 
 module.exports = lucky13;
