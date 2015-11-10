@@ -1,9 +1,6 @@
 var port = process.env.PORT || 8083;  // set our port
-
 var express = require('express');
 var app = express();
-
-
 
 // ROUTES FOR OUR API
 // ========================================================
@@ -16,10 +13,8 @@ router.get('/', function(req, res) {
 	res.json({ message: 'hooray! welcome to our api!'});
 });
 
-
-
 // REGISTER OUR HTML --------------------------
-// ALL OF OUR HTML FILES WILL BE SERVED FROM THE HTML FOLDER
+// ALL OF OUR HTML FILES WILL BE DSERVED FROM THE HTML FOLDER
 app.use(express.static(__dirname + '/html'));
 
 // REGISTER OUR ROUTES ------------------------
