@@ -1,19 +1,25 @@
 Things to do:
 
-[ ] Add lucky 13 back
+[ ] User authentication
+[ ] Move client game logic to server					- Ron
+	[x] Research node.js server
+	[x] Create game object with scoring
+	[x] Add api calls for server data
+	[ ] Create new game object per user session
+	[ ] Create scoring page and leaderboard page
+	    [ ] Find out what leaderboard server will be
+[ ] Add lucky 13 back 									- Greg
     [ ] Create SVG
     [ ] Put SVG on backs 
     [ ] Add additional card back designs
-[ ] Add sounds
-    [ ] Research how to add sounds to website
-    [ ] Create some sounds for effects
+[ ] Add sounds 											- Adam 
+    [x] Research how to add sounds to website
+    [/] Create some sounds for effects
     [ ] Put in sounds
-[ ] Make responsive
-[ ] Correct display of score
-[ ] Meet with Sally
-[ ] Add timer to determine game complete scoring
-[ ] Add advanced play options
-[ ] Create options/settings button with options screen
-[ ] Create scoring page and leaderboard page
-    [ ] Find out what leaderboard server will be
+[ ] Make responsive 									- Greg
+[ ] Correct display of score							- Sally
+[ ] Meet with Sally 									- All (TBD)
+[ ] Add timer to determine game complete scoring		- Ron
+[ ] Add advanced play options							- Ron
+[ ] Create options/settings button with options screen	- Ron
 

@@ -55,7 +55,7 @@ router.get('/play/:column/:row', function( req, res ) {
 });
 
 // REGISTER OUR HTML --------------------------
-// ALL OF OUR HTML FILES WILL BE DSERVED FROM THE HTML FOLDER
+// ALL OF OUR HTML FILES WILL BE SERVED FROM THE HTML FOLDER
 app.use(express.static(__dirname + '/html'));
 
 // REGISTER BODY PARSER -----------------------
