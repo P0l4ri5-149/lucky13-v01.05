@@ -43,12 +43,21 @@ function createCard (x,soot,value, color, left, top) {
     var cardBack = document.createElement("div");
     cardBack.className="card-back";
 
+  // create flip sound audio
+    var audioFlip = document.createElement("audio"); // <audio></audio>
+    audioFlip.setAttribute("id", "cardSound" + x); // <audio id="cardSound1"></audio>
+    var flipSource = document.createElement("source"); // <source></source>
+    flipSource.setAttribute("src", "resources/sounds/cardPlace1.ogg"); // <source src="resources/sounds/cardPlace1.ogg"></source>
+    flipSource.setAttribute("type", "audio/ogg"); // <source src="resources/sounds/cardPlace1.ogg" type="audio/ogg"></source>
+    audioFlip.appendChild(flipSource); // <audio id="cardSound1"><source src="resources/sounds/cardPlace1.ogg" type="audio/ogg"></source></audio>
+
     // add the back and face to the card
     card.appendChild(cardFace);
     card.appendChild(cardFaceUL); 
     card.appendChild(cardCenter); 
     card.appendChild(cardFaceLR);  
     card.appendChild(cardBack);
+    card.appendChild(audioFlip);
     // return the card
     return card;
 
@@ -85,5 +94,6 @@ function createCardIcon (x,soot,value, color, left, top) {
     return card;
 
 }
+
 
 
