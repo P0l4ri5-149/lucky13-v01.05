@@ -327,6 +327,9 @@ function getCards() {
 }
 
 function deal() {
+
+    scaleBoard();
+    
     getSuit( function( suit ) {
         selectSuite(suit);
     });
@@ -355,3 +358,31 @@ function getSuit( callback ) {
         callback( data.suit );
     });
 }
+
+function scaleBoard() {
+    var w = $(window).width();
+    var h = $(window).height();
+    // console.log( "Dimensions W: ", w, " H: ", h );
+    h = h - 80; // subtract the header
+
+    var dw = 786 - w; // difference of original to current width
+    var dh = 492 - h; // difference of original to current height
+
+    var scale = 1;
+    if( dw > 0 || dh > 0 ) {
+
+        if( dw > dh ) {
+            scale = w / 786;
+        } else {
+            scale = h / 512;
+        }
+    }
+
+    $("#board").css("transform", "translate( -50%, 0px ) scale(" + scale + ")");
+
+}
+
+$(window).resize( function(e) {
+    //console.log( "Window resizing! ", e );
+    scaleBoard();
+});
