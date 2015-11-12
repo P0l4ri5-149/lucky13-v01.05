@@ -24,7 +24,8 @@
                 <div class="title">Cards Project</div>
 
                 
-                <div class="playerPoints" id="playerPoints"></div>                   
+                <div class="playerPoints" id="playerPoints"></div> 
+                <div class="playerTimer"  id="playerTimer"></div>                  
                 <div class="playSuite">
                         <button  class="suitBlack" id="soot1" onclick="isSpades()">&spades;</button>
                         <button  class="suitBlack" id="soot2" onclick="isClubs()">&clubs;</button>
@@ -32,6 +33,7 @@
                         <button  class="suitRed" id="soot4" onclick="isDiams()">&diams;</button>
                 </div>
                 <div class="buttons">
+                    <button onclick="setTimeout(playTimer, 3000)" style="display:none;">Try it</button>
                     <button onclick="populateCards()" style="display:none;">populate</button>
                     <button onclick="getCards()" style="display:none;">Get Cards</button>
                     <button onclick="makeCards()">Make Cards</button>

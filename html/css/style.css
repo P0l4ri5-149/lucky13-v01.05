@@ -189,3 +189,12 @@ html, body {
 .suitBlack {
     color: black;
 }
+
+.playerTimer {
+    position: absolute;
+    left: 175px;
+    top: 4px;
+    transform: translate(0, 0);
+    font-size: 20px;
+
+}

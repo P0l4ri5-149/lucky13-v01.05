@@ -6,9 +6,23 @@
  */
 
 
-
+    var playTimeSeconds = 0;
     var rotation = 180;
     var cardnum=1;
+
+function playTimer() {
+    if(playTimeSeconds) {
+        playTimeSeconds += 1;   
+    }
+    else {
+        playTimeSeconds =  1;
+    }
+    var playTimeShow = document.getElementById('playerTimer');
+    playTimeShow.innerHTML = playTimeSeconds;
+
+}
+
+
 /*                   A   2  3  4  5  6  7  8  9 10 J  Q  K 
 var defaultCards =  [00,01,02,03,04,05,06,07,08,09,10,11,12,     // spades
                      13,14,15,16,17,18,19,20,21,22,23,24,25,     // clubs
@@ -239,9 +253,13 @@ function makeCards() {
     clearCards();
     initGame();
     cardnum = 1;
+
     makeHeadRow();
     makeCardRows();
     rotation = 180;
+    playTimeSeconds = 0;
+
+    setInterval(playTimer, 1000);
 }
 
 function clearCards() {
@@ -335,6 +353,7 @@ function deal() {
         url: "api/deal"
     }).done( function( data ) {
         makeCards();
+
     });
 }
 
@@ -355,3 +374,6 @@ function getSuit( callback ) {
         callback( data.suit );
     });
 }
+
+
+

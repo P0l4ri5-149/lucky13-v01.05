@@ -87,3 +87,4 @@ function createCardIcon (x,soot,value, color, left, top) {
 }
 
 
+
