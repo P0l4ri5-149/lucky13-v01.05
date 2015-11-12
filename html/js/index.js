@@ -311,7 +311,7 @@ function getOneCard( row, column, callback ) {
             var faceId = "cardface" + ( UICardId + 1 );
             var cardFace = document.getElementById(faceId); 
             cardFace.style.background = "yellow";
-            document.getElementById( 'cardSound' + idnum ).play();
+            document.getElementById( 'cardSound' + data.card.id ).play();
         }
 
         callback(data.card);
