@@ -6,5 +6,17 @@ sprint 11/9 - 11/15
 
 - Created my changelog "changelog_ar.txt"
 
-11/10
+11/11
 ----
+
+-Moved /resources/sounds/ and files to the html folder in ServerLogic branch
+-Added sound elements to index.html, card.js, and index.js
+
+-Fixed Shuffle Card button back to "make cards" button and fixed individual card flip sound
+
+-Made colCard with double flip sound
+
+-Fixed mostly new sounds for colCard still needs work
+-edited changelog_ar.txt to reflect my changes
+
+
