@@ -305,6 +305,18 @@ function getCardIndex( row, col ) {
     return (ir*13) + ic;
 };
 
+function playGoodCard(cardID) {
+    var audio = $("#cardSound" + cardID); // <audio id="cardSound13"><source src="....." type="audio/ogg" /></audio>
+    var source = audio.find("source"); // <source src="....." type="audio/ogg" />
+    source.attr("src", "resources/sounds/cardOpenPackage1.ogg");      
+    audio[0].pause();
+    audio[0].load();//suspends and restores all audio element
+
+    //audio[0].play(); changed based on Sprachprofi's comment below
+    audio[0].oncanplaythrough = audio[0].play();
+    /****************/
+};
+
 function getOneCard( row, column, callback ) {
     $.ajax({
         url: "/api/play/" + column + "/" + row
@@ -329,7 +341,8 @@ function getOneCard( row, column, callback ) {
             var faceId = "cardface" + ( UICardId + 1 );
             var cardFace = document.getElementById(faceId); 
             cardFace.style.background = "yellow";
-            document.getElementById( 'cardSound' + data.card.id ).play();
+            playGoodCard(getCardIndex( row, column ));
+            // document.getElementById( 'cardSound' + data.card.id ).play();
         }
 
         callback(data.card);
