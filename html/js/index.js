@@ -116,6 +116,7 @@ function rotateOneCard( idx, card ) {
     getOneCard(row, column, function(card){
         rotateOneCard(idx,card);
     });
+    document.getElementById( 'cardSound' + idnum ).play();
 
  }
 
