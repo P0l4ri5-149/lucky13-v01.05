@@ -33,24 +33,35 @@
                         <button  class="suitRed" id="soot4" onclick="isDiams()">&diams;</button>
                 </div>
                 <div class="buttons">
+
                     <button onclick="setTimeout(playTimer, 3000)" style="display:none;">Try it</button>
+
+                    <audio id="1st_sound">
+                        <source src="resources/sounds/cardOpenPackage1.ogg" type="audio/ogg" />
+                    </audio>
+                    <audio id="2st_sound">
+                        <source src="resources/sounds/cardFan1.ogg" type="audio/ogg" />
+                    </audio>
+                    <audio id="3rd_sound">
+                        <source src="resources/sounds/cardPlace1.ogg" type="audio/ogg" />
+                    </audio>
+
                     <button onclick="populateCards()" style="display:none;">populate</button>
                     <button onclick="getCards()" style="display:none;">Get Cards</button>
-                    <button onclick="makeCards()">Make Cards</button>
+                    <button onclick="makeCards();document.getElementById('2st_sound').play();">Make Cards</button>
                     <button onclick="resetGame()" style="display:none;">Reset</button>
                     <button onclick="clearCards()" style="display:none;">Clear Cards</button>
                     <button onclick="turnLeft()" style="display:none;">Left</button>
                     <button onclick="turnRight()" style="display:none;">Right</button>
-                    <button onclick="flip()">Flip</button>
+                    <button onclick="flip();document.getElementById('3rd_sound').play(); return false;">Flip</button>
                 
                 </div> <!-- end buttons -->
 
             </div> <!-- end main-header -->
 
-            <div class="main-content" id="board">
-            <!--
-                <img class="card-back" src="resource/svg/file.svg" alt="Back of card">
-            -->
+            <div class="main-content">
+                <div id="board">
+                </div>
             </div> <!-- end main-content -->
 
         </div> <!-- end wrapper -->
