@@ -1,6 +1,14 @@
 sprint 11/9 - 11/15
 ===================
 
+11/11
+-----
+
+- Added board tag to index.html
+- Changed wrapper styling to take full page.
+- Added Resize event handler to window to calculate scale of board to fit page if page is smaller than normal board size.
+- Added call to scaleBoard to the deal function (so it will scale when page first loads).
+
 11/9
 ----
 
